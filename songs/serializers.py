@@ -8,14 +8,10 @@ class SongSerializer(serializers.ModelSerializer):
         return Song.objects.create(**validated_data)
 
     class Meta:
-        model= Song
+        model = Song
         fields = [
             "id",
             "title",
             "duration",
-            "album_id,"
+            "album_id",
         ]
-# id = serializers.IntegerField(read_only=True)
-# title = serializers.CharField(max_length=255)
-# duration = serializers.CharField(max_length=255)
-# album_id = serializers.IntegerField(read_only=True)

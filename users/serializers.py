@@ -1,6 +1,16 @@
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from .models import User
+
+
+class CustomJWTSerializer(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+        token["id"] = user.id
+
+        return token
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -17,7 +27,7 @@ class UserSerializer(serializers.ModelSerializer):
         return instance
 
     class Meta:
-        modle = User
+        model = User
         fields = [
             "id",
             "username",
@@ -31,31 +41,21 @@ class UserSerializer(serializers.ModelSerializer):
             "username": {
                 UniqueValidator(
                     queryset=User.objects.all(),
-                    message="A user with that username already exists."
+                    message="A user with that username already exists.",
                 )
             },
             "email": {
                 UniqueValidator(
                     queryset=User.objects.all(),
+                    message="Email already exists.",
                 )
             },
             "password": {
                 "write_only": True,
             },
         }
-# id = serializers.IntegerField(read_only=True)
-# username = serializers.CharField(
-#     validators=[
-#         UniqueValidator(
-#             queryset=User.objects.all(),
-#             message="A user with that username already exists.",
-#         )
-#     ],
-# )
-# email = serializers.EmailField(
-#     validators=[UniqueValidator(queryset=User.objects.all())],
-# )
-# password = serializers.CharField(write_only=True)
-# first_name = serializers.CharField(max_length=50)
-# last_name = serializers.CharField(max_length=50)
-# is_superuser = serializers.BooleanField(read_only=True)
+
+
+class SigInSerializer(serializers.Serializer):
+    username = serializers.CharField(max_length=150, write_only=True)
+    password = serializers.CharField(write_only=True)

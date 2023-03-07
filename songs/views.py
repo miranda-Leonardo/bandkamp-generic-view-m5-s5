@@ -6,11 +6,15 @@ from .models import Song
 from rest_framework.pagination import PageNumberPagination
 from .serializers import SongSerializer
 from albums.models import Album
+from rest_framework.generics import ListCreateAPIView
 
 
-class SongView(APIView, PageNumberPagination):
+class SongView(ListCreateAPIView, PageNumberPagination):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticatedOrReadOnly]
+
+    queryset = Song.objects.all()
+    serializer_class = SongSerializer
 
     def get(self, request, pk):
         """
