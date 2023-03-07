@@ -22,7 +22,7 @@ class SongView(ListCreateAPIView, PageNumberPagination):
         """
         songs = Song.objects.filter(album_id=pk)
 
-        result_page = self.paginate_queryset(songs, request)
+        result_page = self.paginate_queryset(songs)
         serializer = SongSerializer(result_page, many=True)
 
         return self.get_paginated_response(serializer.data)
