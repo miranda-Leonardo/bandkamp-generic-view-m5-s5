@@ -21,7 +21,7 @@ class AlbumView(ListCreateAPIView, PageNumberPagination):
         """
         albums = Album.objects.all()
 
-        result_page = self.paginate_queryset(albums, request)
+        result_page = self.paginate_queryset(albums)
         serializer = AlbumSerializer(result_page, many=True)
 
         return self.get_paginated_response(serializer.data)
